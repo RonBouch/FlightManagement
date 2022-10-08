@@ -7,15 +7,11 @@ import { connect } from 'socket.io-client';
 
 const socket = connect("http://localhost:4963")
 const HomePage = observer(() => {
-    console.log(flightsStore.getFlights)
     useEffect(() => {
-        // socket.on("flight-update", (data) => {
-        //     console.log("data", data)
-        // })
+        socket.on("flight-update", (res) => {
+            flightsStore.updateFlightsData(res);
+        })
     }, [socket])
-    const getData = () => {
-        socket.emit('flight-update');
-    }
 
     return (
         <div className='container'>
