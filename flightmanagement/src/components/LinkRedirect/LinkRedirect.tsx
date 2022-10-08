@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 
 const LinkRedirect = () => {
-    const params = useParams();
+    // const params = useParams();
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
