@@ -1,4 +1,5 @@
 import { makeObservable, observable, action, computed } from 'mobx';
+import isEqual from 'lodash.isequal';
 
 interface FlightsItem {
     flightNumber: string
@@ -8,14 +9,10 @@ interface FlightsItem {
     takeoffAirport: string
     takeoffTime: string
 }
-interface Dict<FlightsItem> {
-    data: {
-        [key: string]: FlightsItem;
-    }
-}
+
 class FlightsStore {
-    flights: Dict<FlightsItem> | {} = {};
-    flightsWithFilter: Dict<FlightsItem> | {} = {};
+    flights: { [index: string]: FlightsItem; } = {};
+    flightsWithFilter: { [index: string]: FlightsItem; } = {};
     loader: boolean = false;
 
 
@@ -30,6 +27,7 @@ class FlightsStore {
             setFlights: action,
             setLoader: action,
             setFlightsWithFilter: action,
+            updateFlightsData: action,
 
             getFlights: computed,
             getLoader: computed,
@@ -48,6 +46,17 @@ class FlightsStore {
         }
     }
 
+    updateFlightsData(newFlightData: FlightsItem) {
+        const getFlightNumber = newFlightData?.flightNumber
+        const prevFlightData = this.flights[getFlightNumber];
+        if (prevFlightData && !isEqual(newFlightData, prevFlightData)) {
+            let getPrevLandingTime = prevFlightData.landingTime.slice()
+            this.flights[getFlightNumber] = newFlightData
+            this.flightsWithFilter[getFlightNumber] = newFlightData
+        } else {
+
+        }
+    }
 
     setFlights(data: FlightsItem[]) {
         const dict = Object.assign({}, ...data.map((x) => ({ [x.flightNumber]: x })));

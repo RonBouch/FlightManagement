@@ -1,7 +1,6 @@
 import React from 'react'
-// import { getURLs, setCount, onDelete } from '../../services/ApiServices'
 import isEmpty from 'lodash.isempty';
-const baseURL = "http://localhost:3000/"
+import { observer } from 'mobx-react';
 
 
 interface Props<FlightsItem> {
@@ -21,13 +20,7 @@ interface FlightsItem {
 }
 
 
-const FlightsTable = ({ data }: Props<FlightsItem>) => {
-    console.log("🚀 ~ file: FlightsTable.tsx ~ line 23 ~ FlightsTable ~ data", data)
-
-    const addClick = async (shortenerURL: string) => {
-        // setCount(shortenerURL);
-        // getURLs(dispatch);
-    }
+const FlightsTable = observer(({ data }: Props<FlightsItem>) => {
 
     return (
         <React.Fragment>
@@ -70,6 +63,6 @@ const FlightsTable = ({ data }: Props<FlightsItem>) => {
 
         </React.Fragment>
     )
-}
+})
 
 export default FlightsTable
