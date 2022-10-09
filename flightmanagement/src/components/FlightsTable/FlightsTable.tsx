@@ -1,27 +1,14 @@
 import React from 'react'
 import isEmpty from 'lodash.isempty';
 import { observer } from 'mobx-react';
-
-
+import { FlightsItem } from '../../stores/FlightsStore/FlightsStore'
 interface Props<FlightsItem> {
     data: {
         [key: string]: FlightsItem;
     } | {}
 }
 
-
-interface FlightsItem {
-    flightNumber: string
-    landingAirport: string
-    landingTime: string
-    status: string
-    takeoffAirport: string
-    takeoffTime: string
-}
-
-
 const FlightsTable = observer(({ data }: Props<FlightsItem>) => {
-
     return (
         <React.Fragment>
             {!isEmpty(data) ?
@@ -42,14 +29,10 @@ const FlightsTable = observer(({ data }: Props<FlightsItem>) => {
                         {!isEmpty(data) && Object.entries(data).map(([key, item], index) => {
                             return (<tr key={item?.flightNumber + index} >
                                 <th className='short-column' scope='row'>{index + 1}</th>
-                                <td>
-                                    {item?.flightNumber}
-                                </td>
+                                <td>{item?.flightNumber}</td>
                                 <td>{item?.takeoffAirport}</td>
-                                <td>
-                                    {item?.takeoffTime}
-                                </td>
-                                <td>{item?.landingTime}</td>
+                                <td>{item?.takeoffTime} {item?.takeoffTimeDiff && <p className='delayed'>{`Delayed - ${item?.takeoffTimeDiff} min`}</p>}</td>
+                                <td>{item?.landingTime} {item?.landingTimeDiff && <p className='delayed'>{`Delayed - ${item?.landingTimeDiff} min`}</p>}</td>
                                 <td>{item?.landingAirport}</td>
                                 <td className={`status-${item?.status}`}>{item?.status}</td>
                             </tr>)

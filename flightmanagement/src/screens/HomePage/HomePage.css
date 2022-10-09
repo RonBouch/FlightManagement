@@ -8,6 +8,7 @@
     border: 1px solid #ccc;
     border-collapse: collapse;
     margin: 0;
+    margin-top: 20px;
     padding: 0;
     width: 100%;
     table-layout: fixed;
@@ -19,6 +20,9 @@ table caption {
 }
 .short-column {
     width: 30px;
+}
+.delayed {
+    color: red;
 }
 .styled-table thead tr {
     background-color: #327f87;
