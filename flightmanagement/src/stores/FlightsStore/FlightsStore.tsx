@@ -11,7 +11,7 @@ export interface FlightsItem {
     landingTimeDiff?: string
     takeoffTimeDiff?: string
 }
-
+const MOMENT_FORMAT = "dd/MM/yyyy - HH:mm";
 class FlightsStore {
     flights: { [index: string]: FlightsItem; } = {};
     flightsWithFilter: { [index: string]: FlightsItem; } = {};
@@ -57,8 +57,8 @@ class FlightsStore {
             let newData = newFlightData
 
             if (newFlightData?.landingTime != getPrevLandingTime) {
-                let landingTimeDiff = (moment.duration(moment(new Date(newFlightData.landingTime)).diff(moment(new Date(prevFlightData.landingTime))))).asMinutes();
-                let takeoffTimeDiff = (moment.duration(moment(new Date(newFlightData.takeoffTime)).diff(moment(new Date(prevFlightData.takeoffTime))))).asMinutes();
+                let landingTimeDiff = (moment.duration(moment(newFlightData.landingTime, MOMENT_FORMAT).diff(moment(prevFlightData.landingTime, MOMENT_FORMAT)))).asMinutes();
+                let takeoffTimeDiff = (moment.duration(moment(newFlightData.takeoffTime, MOMENT_FORMAT).diff(moment(prevFlightData.takeoffTime, MOMENT_FORMAT)))).asMinutes();
                 newData['landingTimeDiff'] = landingTimeDiff.toString()
                 newData['takeoffTimeDiff'] = takeoffTimeDiff.toString()
             }
