@@ -1,9 +1,8 @@
 import Header from "./Header/Header";
-import LinkRedirect from "./LinkRedirect/LinkRedirect";
-import NotFoundPage from "./NotFoundPage/NotFoundPage";
-
+import PageNotFound from "./PageNotFound/PageNotFound";
+import FlightsTable from "./FlightsTable/FlightsTable";
 export {
     Header,
-    LinkRedirect,
-    NotFoundPage,
+    FlightsTable,
+    PageNotFound,
 }

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner';
-import NotFoundPage from '../NotFoundPage/NotFoundPage';
 
-const LinkRedirect = () => {
+const NotFoundPage = () => {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -10,12 +9,12 @@ const LinkRedirect = () => {
             setIsLoading(false);
         }, 3000);
     }, [])
-
     return (
-        <div style={{ marginTop: 100 }}>
+        <div>
             {!isLoading ?
                 <>
-                    <NotFoundPage />
+                    <h3>404 page not found</h3>
+                    <p>We are sorry but the page you are looking for does not exist.</p>
                 </>
                 :
                 <ThreeDots
@@ -25,9 +24,8 @@ const LinkRedirect = () => {
                     ariaLabel='loading'
                 />
             }
-
         </div>
     )
 }
 
-export default LinkRedirect
+export default NotFoundPage;

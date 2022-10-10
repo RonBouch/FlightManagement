@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React, { useCallback, useEffect, useState } from 'react'
 import flightsStore from '../../stores/FlightsStore/FlightsStore';
-import './HomePage.css';
-import FlightsTable from '../../components/FlightsTable/FlightsTable';
+import './Style/HomePage.css';
+import { FlightsTable } from '../../components';
 import { connect } from 'socket.io-client';
 import { TextField, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';

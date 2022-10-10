@@ -1,11 +1,6 @@
-/*  */
-/* HomePage */
-/*  */
-.container {
-    padding: 80px;
-}
+@import "../../../Styles/Variables.scss";
 .styled-table {
-    border: 1px solid #ccc;
+    border: 1px solid $border_color;
     border-collapse: collapse;
     margin: 0;
     margin-top: 20px;
@@ -22,11 +17,11 @@ table caption {
     width: 30px;
 }
 .delayed {
-    color: red;
+    color: $red;
 }
 .styled-table thead tr {
-    background-color: #327f87;
-    color: #ffffff;
+    background-color: $turquoise;
+    color: $white;
     overflow: hidden;
     text-align: left;
 }
@@ -41,30 +36,27 @@ table th {
     text-transform: uppercase;
 }
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid $border_bottom_color2;
     padding: .35em;
 }
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+    background-color: $light_gray;
 }
 .status-airborne {
-    background-color: #81a135;
+    background-color: $green;
 }
 .status-malfunction {
-    background-color: #f44336;
+    background-color: $red;
 }
 .status-hangar {
-    background-color: #9ed9db;
-    color: black;
+    background-color: $azure;
+    color: $black;
 }
 .no-results {
     font-size: 80px;
-    color: rgba(0, 0, 0, 0.30);
+    color: $placeholder_color;
 }
 @media screen and (max-width: 600px) {
-    .container {
-        padding: 45px;
-    }
     table {
         border: 0;
     }
@@ -85,12 +77,12 @@ table th {
         width: 1px;
     }
     table tr {
-        border-bottom: 3px solid rgb(155, 149, 149, 0.4);
+        border-bottom: 3px solid $border_bottom_color;
         display: block;
         margin-bottom: .625em;
     }
     table td {
-        border-bottom: 1px solid rgb(155, 149, 149, 0.4);
+        border-bottom: 1px solid $border_bottom_color;
         display: block;
         font-size: .8em;
         text-align: right;
@@ -108,9 +100,4 @@ table th {
     table td:last-child {
         border-bottom: 0;
     }
-}
-/* general styling */
-body {
-    font-family: "Open Sans", sans-serif;
-    line-height: 1.25;
 }
