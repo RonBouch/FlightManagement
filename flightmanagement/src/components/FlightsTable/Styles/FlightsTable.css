@@ -1,0 +1,115 @@
+.styled-table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  margin-top: 20px;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+  overflow: hidden;
+}
+
+table caption {
+  font-size: 1.5em;
+  margin: 0.5em 0 0.75em;
+}
+
+.short-column {
+  width: 30px;
+}
+
+.delayed {
+  color: #f44336;
+}
+
+.styled-table thead tr {
+  background-color: #327f87;
+  color: #ffffff;
+  overflow: hidden;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 1.5em;
+  text-align: center;
+}
+
+table th {
+  font-size: 0.85em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  padding: 0.35em;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.status-airborne {
+  background-color: #81a135;
+}
+
+.status-malfunction {
+  background-color: #f44336;
+}
+
+.status-hangar {
+  background-color: #9ed9db;
+  color: rgb(26, 26, 26);
+}
+
+.no-results {
+  font-size: 80px;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+  .short-column {
+    width: 100%;
+  }
+  table caption {
+    font-size: 1.3em;
+  }
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  table tr {
+    border-bottom: 3px solid rgba(155, 149, 149, 0.4);
+    display: block;
+    margin-bottom: 0.625em;
+  }
+  table td {
+    border-bottom: 1px solid rgba(155, 149, 149, 0.4);
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+  }
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  table td:last-child {
+    border-bottom: 0;
+  }
+}/*# sourceMappingURL=FlightsTable.css.map */

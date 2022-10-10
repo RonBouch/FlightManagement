@@ -1,6 +1,7 @@
 import React from 'react'
 import isEmpty from 'lodash.isempty';
 import { observer } from 'mobx-react';
+import "../FlightsTable/Styles/FlightsTable.css"
 import { FlightsItem } from '../../stores/FlightsStore/FlightsStore'
 interface Props<FlightsItem> {
     data: {

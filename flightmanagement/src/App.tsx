@@ -1,17 +1,13 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage } from './screens'
-import { Header, LinkRedirect } from './components';
+import { Header, PageNotFound } from './components';
 import { useEffect } from 'react';
 import { getflights } from './services/ApiServices';
 
 function App() {
-  const pathname = window.location.pathname;
 
   useEffect(() => {
-    // if (pathname == '/') {
-    //   window.location.pathname = '/';
-    // }
     const fetchData = async () => {
       getflights()
     }
@@ -25,7 +21,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          {/* <Route path="/:some" element={<LinkRedirect />} /> */}
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
     </BrowserRouter>

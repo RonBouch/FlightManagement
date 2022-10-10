@@ -15,10 +15,3 @@ export const getflights = async () => {
     }
 }
 
-export const getFlight = async (flightNumber: string) => {
-    const res = await axios.get(`${LOCAL_URL}/flights/${flightNumber}`)
-    if (res.status === 200) {
-        return res.data;
-    }
-}
-
