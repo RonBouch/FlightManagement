@@ -66,8 +66,6 @@ class FlightsStore {
             this.flights[getFlightNumber] = newFlightData
             if (this.flightsWithFilter[getFlightNumber])
                 this.flightsWithFilter[getFlightNumber] = newData;
-        } else {
-
         }
     }
 
