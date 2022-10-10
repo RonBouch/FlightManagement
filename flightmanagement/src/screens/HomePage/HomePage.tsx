@@ -30,7 +30,7 @@ const HomePage = observer(() => {
         setSearchValue(e.target.value)
         if (e.target.value.length > 1) {
             handleNewDataWithDebounce(e.target.value);
-        } else if (e.target.value.length == 2) {
+        } else {
             handleNewDataWithDebounce();
         }
     }, [searchValue]);
