@@ -2,18 +2,21 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage } from './screens'
 import { Header, PageNotFound } from './components';
-import { useEffect } from 'react';
-import { getflights } from './services/ApiServices';
+import { useContext, useEffect } from 'react';
+import { getFlights } from './services/ApiServices';
+import { FlightsContext } from './stores/FlightsStore/FlightsContext';
 
 function App() {
+  const { flightsStore } = useContext(FlightsContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      getflights()
+      const flights = await getFlights();
+      flightsStore?.setFlights(flights)
     }
     fetchData()
       .catch(console.error);
-  }, [])
+  }, [flightsStore])
 
   return (
     <BrowserRouter>

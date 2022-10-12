@@ -1,6 +1,5 @@
-import { makeObservable, observable, action, computed } from 'mobx';
-import isEqual from 'lodash.isequal';
-import moment from 'moment';
+import { makeObservable, observable, action, computed, IObservableArray } from 'mobx';
+import FlightDataStore from './FlightDataStore';
 export interface FlightsItem {
     flightNumber: string
     landingAirport: string
@@ -11,10 +10,17 @@ export interface FlightsItem {
     landingTimeDiff?: string
     takeoffTimeDiff?: string
 }
-const MOMENT_FORMAT = "dd/MM/yyyy - HH:mm";
-class FlightsStore {
-    flights: { [index: string]: FlightsItem; } = {};
-    flightsWithFilter: { [index: string]: FlightsItem; } = {};
+export interface TFlightsStore {
+    flights: IObservableArray<FlightDataStore>;
+    flightsWithFilter: IObservableArray<FlightDataStore>;
+    setFlights: (data: IObservableArray<FlightDataStore>) => void;
+    setFlightsWithFilter: (searchValue: string) => void;
+    updateFlightsData: (newFlightData: FlightsItem) => void;
+    readonly getFlights: IObservableArray<FlightDataStore>;
+}
+export class FlightsStore implements TFlightsStore {
+    flights: IObservableArray<FlightDataStore>;
+    flightsWithFilter: IObservableArray<FlightDataStore>
 
     constructor() {
         makeObservable(this, {
@@ -26,16 +32,15 @@ class FlightsStore {
             updateFlightsData: action,
 
             getFlights: computed,
-            getFlightsWithFilter: computed,
-            getOriginalflights: computed,
         });
+        this.flights = observable.array<FlightDataStore>([]);
+        this.flightsWithFilter = observable.array<FlightDataStore>([]);
     }
 
     setFlightsWithFilter(searchValue?: string) {
         if (searchValue) {
-            let filtered = Object.assign({}, ...
-                Object.entries(this.flights).filter(([k, v]) =>
-                    k.toString().toUpperCase().includes(searchValue.toUpperCase()) ||
+            let filtered: IObservableArray<FlightDataStore> = Object.assign({}, ...
+                Object.entries(this.flights).slice().filter(([k, v]) => v.flightNumber.toString().toUpperCase().includes(searchValue.toUpperCase()) ||
                     v.takeoffAirport.toUpperCase().includes(searchValue.toUpperCase()) ||
                     v.landingAirport.toUpperCase().includes(searchValue.toUpperCase())
                 ).map(([k, v]) => ({ [k]: v }))
@@ -47,46 +52,21 @@ class FlightsStore {
         }
     }
 
-
-
     updateFlightsData(newFlightData: FlightsItem) {
-        const getFlightNumber = newFlightData?.flightNumber
-        const prevFlightData = this.flights[getFlightNumber];
-        if (prevFlightData && !isEqual(newFlightData, prevFlightData)) {
-            let getPrevLandingTime = prevFlightData.landingTime.slice()
-            let newData = newFlightData
-
-            if (newFlightData?.landingTime != getPrevLandingTime) {
-                let landingTimeDiff = (moment.duration(moment(newFlightData.landingTime, MOMENT_FORMAT).diff(moment(prevFlightData.landingTime, MOMENT_FORMAT)))).asMinutes();
-                let takeoffTimeDiff = (moment.duration(moment(newFlightData.takeoffTime, MOMENT_FORMAT).diff(moment(prevFlightData.takeoffTime, MOMENT_FORMAT)))).asMinutes();
-                newData['landingTimeDiff'] = landingTimeDiff.toString()
-                newData['takeoffTimeDiff'] = takeoffTimeDiff.toString()
-            }
-
-            this.flights[getFlightNumber] = newFlightData
-            if (this.flightsWithFilter[getFlightNumber])
-                this.flightsWithFilter[getFlightNumber] = newData;
-        }
+        const getFlightIndex = this.flights.findIndex(f => f.flightNumber === newFlightData?.flightNumber)
+        this.flights[getFlightIndex].update(newFlightData);
     }
 
-    setFlights(data: FlightsItem[]) {
-        const dict = Object.assign({}, ...data.map((x) => ({ [x.flightNumber]: x })));
-
-        this.flights = dict;
-        this.flightsWithFilter = dict;
+    setFlights(data: IObservableArray<FlightDataStore>) {
+        data?.map((item, index) => {
+            const newItem = new FlightDataStore(item);
+            this.flights.push(newItem);
+        })
+        this.flightsWithFilter = this.flights
     }
 
     get getFlights() {
         return this.flightsWithFilter
     }
-    get getOriginalflights() {
-        return this.flights;
-    }
 
-    get getFlightsWithFilter() {
-        return this.flightsWithFilter;
-    }
 }
-
-const flightsStore = new FlightsStore();
-export default flightsStore;

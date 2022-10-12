@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react';
-import React, { useCallback, useEffect, useState } from 'react'
-import flightsStore from '../../stores/FlightsStore/FlightsStore';
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import './Style/HomePage.css';
 import { FlightsTable } from '../../components';
 import { connect } from 'socket.io-client';
@@ -8,21 +7,25 @@ import { TextField, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 import { debounce } from "lodash";
 import { LOCAL_URL } from '../../services/ApiServices';
+import { FlightsContext } from '../../stores/FlightsStore/FlightsContext';
 
 const socket = connect(LOCAL_URL);
 
 const HomePage = observer(() => {
+    const { flightsStore } = useContext(FlightsContext);
 
     useEffect(() => {
-        socket.on("flight-update", (res) => {
-            flightsStore.updateFlightsData(res);
-        })
+        if (flightsStore) {
+            socket.on("flight-update", (res) => {
+                flightsStore?.updateFlightsData(res);
+            })
+        }
     }, [socket])
 
     const [searchValue, setSearchValue] = useState('')
 
     const getDataWithFilter = (e: string) => {
-        flightsStore.setFlightsWithFilter(e)
+        flightsStore?.setFlightsWithFilter(e)
     }
     const handleNewDataWithDebounce: any = useCallback(debounce(getDataWithFilter, 500), []);
 
@@ -53,7 +56,7 @@ const HomePage = observer(() => {
                     ),
                 }}
             />
-            <FlightsTable data={flightsStore.getFlights} />
+            <FlightsTable data={flightsStore?.getFlights || []} />
 
         </div>
     )
