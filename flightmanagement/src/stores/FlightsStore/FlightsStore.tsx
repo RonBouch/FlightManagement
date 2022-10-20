@@ -1,26 +1,11 @@
-import { makeObservable, observable, action, computed, IObservableArray } from 'mobx';
+import { makeObservable, observable, action, computed } from 'mobx';
+import { getFlights } from '../../services/ApiServices';
+import { FlightPropT, FlightsType, TFlightsStore } from '../../services/types';
 import FlightDataStore from './FlightDataStore';
-export interface FlightsItem {
-    flightNumber: string
-    landingAirport: string
-    landingTime: string
-    status: string
-    takeoffAirport: string
-    takeoffTime: string
-    landingTimeDiff?: string
-    takeoffTimeDiff?: string
-}
-export interface TFlightsStore {
-    flights: IObservableArray<FlightDataStore>;
-    flightsWithFilter: IObservableArray<FlightDataStore>;
-    setFlights: (data: IObservableArray<FlightDataStore>) => void;
-    setFlightsWithFilter: (searchValue: string) => void;
-    updateFlightsData: (newFlightData: FlightsItem) => void;
-    readonly getFlights: IObservableArray<FlightDataStore>;
-}
+
 export class FlightsStore implements TFlightsStore {
-    flights: IObservableArray<FlightDataStore>;
-    flightsWithFilter: IObservableArray<FlightDataStore>
+    flights: FlightsType;
+    flightsWithFilter: FlightsType
 
     constructor() {
         makeObservable(this, {
@@ -33,13 +18,23 @@ export class FlightsStore implements TFlightsStore {
 
             getFlights: computed,
         });
-        this.flights = observable.array<FlightDataStore>([]);
-        this.flightsWithFilter = observable.array<FlightDataStore>([]);
+        this.flights = {}
+        this.flightsWithFilter = {}
+        this.getDataFromServer()
+    }
+
+    async getDataFromServer() {
+        try {
+            const flights = await getFlights();
+            this.setFlights(flights)
+        } catch (error) {
+            console.log("getData ~ error", error)
+        }
     }
 
     setFlightsWithFilter(searchValue?: string) {
         if (searchValue) {
-            let filtered: IObservableArray<FlightDataStore> = Object.assign({}, ...
+            let filtered: FlightsType = Object.assign({}, ...
                 Object.entries(this.flights).slice().filter(([k, v]) => v.flightNumber.toString().toUpperCase().includes(searchValue.toUpperCase()) ||
                     v.takeoffAirport.toUpperCase().includes(searchValue.toUpperCase()) ||
                     v.landingAirport.toUpperCase().includes(searchValue.toUpperCase())
@@ -52,17 +47,17 @@ export class FlightsStore implements TFlightsStore {
         }
     }
 
-    updateFlightsData(newFlightData: FlightsItem) {
-        const getFlightIndex = this.flights.findIndex(f => f.flightNumber === newFlightData?.flightNumber)
-        this.flights[getFlightIndex].update(newFlightData);
+    updateFlightsData(newFlightData: FlightPropT) {
+        this.flights[newFlightData.flightNumber].update(newFlightData);
     }
 
-    setFlights(data: IObservableArray<FlightDataStore>) {
+    setFlights(data: FlightPropT[]) {
+        let newDict: FlightsType = {}
         data?.map((item, index) => {
-            const newItem = new FlightDataStore(item);
-            this.flights.push(newItem);
+            newDict[item.flightNumber.toString()] = new FlightDataStore(item);
         })
-        this.flightsWithFilter = this.flights
+        this.flights = newDict;
+        this.flightsWithFilter = newDict;
     }
 
     get getFlights() {

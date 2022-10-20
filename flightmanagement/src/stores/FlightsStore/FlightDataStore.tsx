@@ -1,21 +1,11 @@
 import { action, makeObservable, observable } from "mobx";
 import moment from "moment";
-import { FlightsItem } from "./FlightsStore";
+import { FlightPropT } from "../../services/types";
 const MOMENT_FORMAT = "dd/MM/yyyy - HH:mm";
 
-interface FlightProp {
-    flightNumber: string
-    landingAirport: string
-    landingTime: string
-    status: string
-    takeoffAirport: string
-    takeoffTime: string
-    landingTimeDiff?: string
-    takeoffTimeDiff?: string
-    update: (item: FlightsItem) => void;
-}
 
-export default class FlightDataStore implements FlightProp {
+
+export default class FlightDataStore implements FlightPropT {
     flightNumber: string;
     landingAirport: string
     landingTime: string
@@ -25,7 +15,7 @@ export default class FlightDataStore implements FlightProp {
     landingTimeDiff?: string;
     takeoffTimeDiff?: string;
 
-    constructor(params?: FlightsItem) {
+    constructor(params?: FlightPropT) {
         this.flightNumber = params?.flightNumber || '';
         this.landingAirport = params?.landingAirport || '';
         this.landingTime = params?.landingTime || '';
@@ -52,7 +42,7 @@ export default class FlightDataStore implements FlightProp {
     }
 
 
-    update(item: FlightsItem) {
+    update(item: FlightPropT) {
         const prevLandingTime = this.landingTime;
         const prevTakeoffTime = this.takeoffTime;
         this.flightNumber = item?.flightNumber;
