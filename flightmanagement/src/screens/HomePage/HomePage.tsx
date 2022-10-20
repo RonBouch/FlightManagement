@@ -1,27 +1,15 @@
 import { observer } from 'mobx-react';
-import React, { useCallback, useContext, useEffect, useState } from 'react'
-import './Style/HomePage.css';
+import { useCallback, useContext, useState } from 'react'
 import { FlightsTable } from '../../components';
-import { connect } from 'socket.io-client';
+import './Style/HomePage.css';
 import { TextField, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 import { debounce } from "lodash";
-import { LOCAL_URL } from '../../services/ApiServices';
 import { FlightsContext } from '../../stores/FlightsStore/FlightsContext';
 
-const socket = connect(LOCAL_URL);
 
 const HomePage = observer(() => {
     const { flightsStore } = useContext(FlightsContext);
-
-    useEffect(() => {
-        if (flightsStore) {
-            socket.on("flight-update", (res) => {
-                flightsStore?.updateFlightsData(res);
-            })
-        }
-    }, [socket])
-
     const [searchValue, setSearchValue] = useState('')
 
     const getDataWithFilter = (e: string) => {
@@ -56,7 +44,7 @@ const HomePage = observer(() => {
                     ),
                 }}
             />
-            <FlightsTable data={flightsStore?.getFlights || []} />
+            {flightsStore && <FlightsTable data={flightsStore.getFlights} />}
 
         </div>
     )
